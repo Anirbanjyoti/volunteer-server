@@ -13,8 +13,7 @@ app.use(express.json());
 // DB_PASS:bRFLY7MLmKzUGQ4Q, eQPDbUel8k68teuL
 
 // Database connection
-const uri =
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.eh0djdh.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.eh0djdh.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -33,6 +32,13 @@ async function run() {
       const cursor = eventsCollection.find(query);
       const events = await cursor.toArray();
       res.send(events);
+    });
+    //  create API to get single data by ID
+    app.get("/events/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const event = await eventsCollection.findOne(query);
+      res.send(event);
     });
     console.log(`Db Connected`);
   } finally {
