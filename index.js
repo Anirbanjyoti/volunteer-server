@@ -40,6 +40,20 @@ async function run() {
       const event = await eventsCollection.findOne(query);
       res.send(event);
     });
+    // Post API-- to create / add service to all service
+    app.post("/events ", async (req, res) => {
+      const newEvents = req.body;
+      const result = await eventsCollection.insertOne(newEvents);
+      res.send(result);
+    });
+        // Post API-- to Delete service
+        app.delete("/events/:id", async (req, res) => {
+          const id = req.params.id;
+          const query = { _id: ObjectId(id) };
+          const result = await eventsCollection.deleteOne(query);
+          res.send(result);
+        });
+
     console.log(`Db Connected`);
   } finally {
     // await client.close();
